@@ -1,0 +1,379 @@
+{% load static %}
+
+<div class="container flex-grow-1 flex-shrink-0">
+    <div class="stepper-container shadow-sm">
+        <div class="stepper-header" id="stepProgressBar">
+            <div class="step active">
+                <div class="bullet">1</div>
+                <span class="step-text">Consultas</span>
+            </div>
+
+            <div class="step ">
+                <div class="bullet ">2</div>
+                <span class="step-text">Date e Hora</span>
+            </div>
+
+            <div class="step">
+                <div class="bullet">3</div>
+                <span class="step-text">Detalhes</span>
+            </div>
+        </div>
+        <div class="content">
+
+            <div class="step-content">
+
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                    <div class="col">
+                        <label for="modalidade">Modalidade: </label>
+                        <select id="modalidade" class="form-select"
+                                aria-label="Default select example">
+                            <option selected>Selecione uma opção</option>
+                            <option value="1">Online</option>
+                            <option value="2">Presencial</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="especialidade">Especialidade: </label>
+                        <select id="especialidade" class="form-select"
+                                aria-label="Default select example">
+                            <option selected>Selecione uma opção</option>
+                            <option value="1">Atendimento Social</option>
+                            <option value="2">Consultoria</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label for="especialidade">Especialidade: </label>
+                        <select id="especialidade" class="form-select"
+                                aria-label="Default select example">
+                            <option selected>Qualquer</option>
+                            <option value="1">Psc. Deucilene Medeiros</option>
+                            <option value="2">Psc. Arlete Gomes Dias</option>
+                        </select>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-content d-none">
+                <div class="container-calendar">
+                    <div class="calendar shadow rounded-3">
+                        <div class="month text-light">
+                            <i class="bi bi-chevron-compact-left prev"></i>
+                            <div class="date">
+                                <h3 class="h3"></h3>
+                            </div>
+                            <i class="bi bi-chevron-compact-right next"></i>
+                        </div>
+                        <div class="weekdays">
+                            <div>Dom</div>
+                            <div>Seg</div>
+                            <div>Ter</div>
+                            <div>Qua</div>
+                            <div>Qui</div>
+                            <div>Sex</div>
+                            <div>Sab</div>
+                        </div>
+                        <div id="days" class="days"></div>
+                    </div>
+                    <div class="available-times">
+                        <div class="times">
+                            <label for="09">
+                                <input class="form-check-input" name="inputRadios" id="09" type="radio">
+                                <span>09:00</span>
+                            </label>
+
+                            <label for="10">
+                                <input class="form-check-input" name="inputRadios" id="10" type="radio">
+                                <span>10:00</span>
+                            </label>
+
+                            <label for="11">
+                                <input class="form-check-input" name="inputRadios" id="11" type="radio">
+                                <span>11:00</span>
+                            </label>
+
+                            <label for="12">
+                                <input class="form-check-input" name="inputRadios" id="12" type="radio">
+                                <span>12:00</span>
+                            </label>
+
+                            <label for="13">
+                                <input class="form-check-input" name="inputRadios" id="13" type="radio">
+                                <span>13:00</span>
+                            </label>
+
+                            <label for="14">
+                                <input class="form-check-input" name="inputRadios" id="14" type="radio">
+                                <span>14:00</span>
+                            </label>
+
+                            <label for="15">
+                                <input class="form-check-input" name="inputRadios" id="15" type="radio">
+                                <span>15:00</span>
+                            </label>
+                        </div>
+                        <div class="times">
+                            <label for="16">
+                                <input class="form-check-input" name="inputRadios" id="16" type="radio">
+                                <span>16:00</span>
+                            </label>
+
+                            <label for="17">
+                                <input class="form-check-input" name="inputRadios" id="17" type="radio">
+                                <span>17:00</span>
+                            </label>
+
+                            <label for="18">
+                                <input class="form-check-input" name="inputRadios" id="18" type="radio">
+                                <span>18:00</span>
+                            </label>
+
+                            <label for="19">
+                                <input class="form-check-input" name="inputRadios" id="19" type="radio">
+                                <span>19:00</span>
+                            </label>
+
+                            <label for="20">
+                                <input class="form-check-input" name="inputRadios" id="20" type="radio">
+                                <span>20:00</span>
+                            </label>
+
+                            <label for="21">
+                                <input class="form-check-input" name="inputRadios" id="21" type="radio">
+                                <span>21:00</span>
+                            </label>
+
+                            <label for="22">
+                                <input class="form-check-input" name="inputRadios" id="22" type="radio">
+                                <span>22:00</span>
+                            </label>
+                        </div>
+                        <div class="times">
+                            <label for="09">
+                                <input class="form-check-input" name="inputRadios" id="09" type="radio">
+                                <span>09:00</span>
+                            </label>
+
+                            <label for="10">
+                                <input class="form-check-input" name="inputRadios" id="10" type="radio">
+                                <span>10:00</span>
+                            </label>
+
+                            <label for="11">
+                                <input class="form-check-input" name="inputRadios" id="11" type="radio">
+                                <span>11:00</span>
+                            </label>
+
+                            <label for="12">
+                                <input class="form-check-input" name="inputRadios" id="12" type="radio">
+                                <span>12:00</span>
+                            </label>
+
+                            <label for="13">
+                                <input class="form-check-input" name="inputRadios" id="13" type="radio">
+                                <span>13:00</span>
+                            </label>
+
+                            <label for="14">
+                                <input class="form-check-input" name="inputRadios" id="14" type="radio">
+                                <span>14:00</span>
+                            </label>
+
+                            <label for="15">
+                                <input class="form-check-input" name="inputRadios" id="15" type="radio">
+                                <span>15:00</span>
+                            </label>
+                        </div>
+                        <div class="times">
+                            <label for="16">
+                                <input class="form-check-input" name="inputRadios" id="16" type="radio">
+                                <span>16:00</span>
+                            </label>
+
+                            <label for="17">
+                                <input class="form-check-input" name="inputRadios" id="17" type="radio">
+                                <span>17:00</span>
+                            </label>
+
+                            <label for="18">
+                                <input class="form-check-input" name="inputRadios" id="18" type="radio">
+                                <span>18:00</span>
+                            </label>
+
+                            <label for="19">
+                                <input class="form-check-input" name="inputRadios" id="19" type="radio">
+                                <span>19:00</span>
+                            </label>
+
+                            <label for="20">
+                                <input class="form-check-input" name="inputRadios" id="20" type="radio">
+                                <span>20:00</span>
+                            </label>
+
+                            <label for="21">
+                                <input class="form-check-input" name="inputRadios" id="21" type="radio">
+                                <span>21:00</span>
+                            </label>
+
+                            <label for="22">
+                                <input class="form-check-input" name="inputRadios" id="22" type="radio">
+                                <span>22:00</span>
+                            </label>
+                        </div>
+                        <div class="times">
+                            <label for="09">
+                                <input class="form-check-input" name="inputRadios" id="09" type="radio">
+                                <span>09:00</span>
+                            </label>
+
+                            <label for="10">
+                                <input class="form-check-input" name="inputRadios" id="10" type="radio">
+                                <span>10:00</span>
+                            </label>
+
+                            <label for="11">
+                                <input class="form-check-input" name="inputRadios" id="11" type="radio">
+                                <span>11:00</span>
+                            </label>
+
+                            <label for="12">
+                                <input class="form-check-input" name="inputRadios" id="12" type="radio">
+                                <span>12:00</span>
+                            </label>
+
+                            <label for="13">
+                                <input class="form-check-input" name="inputRadios" id="13" type="radio">
+                                <span>13:00</span>
+                            </label>
+
+                            <label for="14">
+                                <input class="form-check-input" name="inputRadios" id="14" type="radio">
+                                <span>14:00</span>
+                            </label>
+
+                            <label for="15">
+                                <input class="form-check-input" name="inputRadios" id="15" type="radio">
+                                <span>15:00</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="step-content d-none">
+
+                <div class="row row-cols-1 row-cols-md-2 g-2">
+                    <div class="col">
+                        <div class="my-3 p-3 bg-body rounded shadow-sm" style="min-height: 22rem">
+                            <h6 class="border-bottom pb-2 mb-0">Detalhes da consulta</h6>
+                            <div class="d-flex text-muted pt-3">
+                                <i class="bi bi-pin-angle" style="font-size: 1.6rem; margin-right:.5rem "></i>
+                                <p class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                                    <strong class="d-block text-gray-dark">Serviço</strong>
+                                    Psicanálise Positiva Infantil - Online
+                                </p>
+                            </div>
+                            <div class="d-flex text-muted pt-3">
+                                <i class="bi bi-person-lines-fill"
+                                   style="font-size: 1.6rem; margin-right:.5rem "></i>
+
+                                <p class="pb-3 mb-0 small lh-sm border-bottom w-100">
+                                    <strong class="d-block text-gray-dark">Especialista</strong>
+                                    Dr. Romeo Galis Durães
+                                </p>
+                            </div>
+                            <div class="d-flex text-muted pt-3">
+                                <i class="bi bi-clock" style="font-size: 1.6rem; margin-right:.5rem "></i>
+                                <p class="pb-3 mb-0 small lh-sm w-100 border-bottom">
+                                    <strong class="d-block text-gray-dark">Data </strong>
+                                    24-06-2022 às 14:00
+                                </p>
+                            </div>
+
+                            <div class="d-flex text-muted pt-3">
+                                <i class="bi bi-coin" style="font-size: 1.6rem; margin-right:.5rem "></i>
+                                <p class="pb-3 mb-0 small lh-sm w-100">
+                                    <strong class="d-block text-gray-dark">Valor </strong>
+                                    R$ 450,00
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="my-3 p-3 bg-body rounded shadow-sm" style="min-height: 22rem">
+                            <h6 class="border-bottom pb-2 mb-0">Pagamento</h6>
+                            <div class="my-3">
+                                <div class="form-check">
+                                    <input id="credit" name="paymentMethod" type="radio"
+                                           class="form-check-input" checked required>
+                                    <label class="form-check-label" for="credit">Crédito</label>
+                                </div>
+                                <div class="form-check">
+                                    <input id="debit" name="paymentMethod" type="radio" class="form-check-input"
+                                           required>
+                                    <label class="form-check-label" for="debit">Débito</label>
+                                </div>
+                                <div class="form-check">
+                                    <input id="paypal" name="paymentMethod" type="radio"
+                                           class="form-check-input" required>
+                                    <label class="form-check-label" for="paypal">PayPal</label>
+                                </div>
+                            </div>
+
+                            <div class="row gy-3">
+                                <div class="col-md-6">
+                                    <label for="cc-name" class="form-label">Name on card</label>
+                                    <input type="text" class="form-control" id="cc-name" placeholder=""
+                                           required>
+                                    <small class="text-muted">Full name as displayed on card</small>
+                                    <div class="invalid-feedback">
+                                        Name on card is required
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="cc-number" class="form-label">Credit card number</label>
+                                    <input type="text" class="form-control" id="cc-number" placeholder=""
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Credit card number is required
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="cc-expiration" class="form-label">Expiration</label>
+                                    <input type="text" class="form-control" id="cc-expiration" placeholder=""
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Expiration date required
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label for="cc-cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
+                                    <div class="invalid-feedback">
+                                        Security code required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="stepper-footer">
+            <button id="previousBtn" class="btn btn-primary disabled">
+                <i class="bi bi-chevron-compact-left me-2"></i> Anterior
+            </button>
+            <button id="nextBtn" class="btn btn-primary">Próximo
+                <i class="bi bi-chevron-compact-right ms-2"></i></button>
+            <button id="confirmBtn" class="btn btn-success d-none">
+                <i class="bi bi-check2 me-2"></i>Confirmar
+            </button>
+        </div>
+    </div>
+
+</div>

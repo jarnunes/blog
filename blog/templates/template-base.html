@@ -1,0 +1,11 @@
+{% extends 'commons/external_base.html' %}
+{% load static %}
+
+{% block base_container %}
+    {% block header %}
+        <header>
+            {% include 'post/partials/_header.html' %}
+        </header>
+    {% endblock %}
+    {% block container %}{% endblock %}
+{% endblock %}
