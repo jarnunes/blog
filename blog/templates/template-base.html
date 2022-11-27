@@ -1,11 +1,16 @@
 {% extends 'commons/external_base.html' %}
 {% load static %}
-
+{% load commons %}
 {% block base_container %}
     {% block header %}
         <header>
             {% include 'post/partials/_header.html' %}
         </header>
     {% endblock %}
-    {% block container %}{% endblock %}
+    <main class="mt-5">
+        <div class="container pt-4" style="text-align: justify">
+            <div id="messages" class="messages">{% include 'commons/components/messages.html' %}</div>
+            {% block container %}{% endblock %}
+        </div>
+    </main>
 {% endblock %}

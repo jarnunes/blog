@@ -1,0 +1,28 @@
+{% extends 'template-base.html' %}
+{% block title %}Blog{% endblock %}
+{% block container %}
+    <h1>Share {{ post.title }} by e-mail</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="row row-cols-1 row-cols-md-2 g-2">
+            <div class="col">
+                <label for="{{ form.name.id_for_label }}">Nome:</label>
+                {{ form.name }}
+            </div>
+            <div class="col">
+                <label for="{{ form.email.id_for_label }}">E-mail:</label>
+                {{ form.email }}
+            </div>
+
+            <div class="col">
+                <label for="{{ form.to.id_for_label }}">To:</label>
+                {{ form.to }}
+            </div>
+        </div>
+        <div class="col-12 mt-2">
+            <label for="{{ form.comments.id_for_label }}">Comments:</label>
+            {{ form.comments }}
+        </div>
+        <input class="btn btn-sm btn-secondary mt-2" type="submit" value="Sent e-mail">
+    </form>
+{% endblock %}
