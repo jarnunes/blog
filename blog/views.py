@@ -1,12 +1,13 @@
-from commons.python.utils import Help
+from commons.python.helper import get_pagination, is_post_method
+from commons.python.smtp import send_email
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView
-from requests import request
 
 from .models import Post, Comment
+from taggit.models import Tag
 from .python.forms import EmailPostForm, CommentForm
-from .python.help.help import send_email
+# from .python.help.help import send_email
 
 
 class PostListView(ListView):
@@ -16,12 +17,24 @@ class PostListView(ListView):
     template_name = 'post/list.html'
 
 
+def post_list(request, tag_slug=None):
+    posts = Post.published.all()
+
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        posts = posts.filter(tags__in=[tag])
+
+    posts = get_pagination(request=request, object_list=posts, per_page=3)
+    return render(request, template_name='post/list.html', context={'posts': posts, 'tag': tag})
+
+
 def post_detail(request, year, month, day, post):
     post = get_object_or_404(Post, slug=post, status='published', publish__year=year, publish__month=month,
                              publish__day=day)
 
     comments = post.comments.filter(active=True)
-    if Help.is_post_method(request):
+    if is_post_method(request):
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
@@ -37,7 +50,7 @@ def post_detail(request, year, month, day, post):
 
 def post_share(request, post_id):
     post = get_object_or_404(Post, id=post_id, status='published')
-    if Help.is_post_method(request):
+    if is_post_method(request):
         form = EmailPostForm(request.POST)
         if form.is_valid():
             cleaned_data = form.cleaned_data

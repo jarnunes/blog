@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from blog.python.managers.manager import PublishedManager
 from django.urls import reverse
+from taggit.managers import TaggableManager
 
 
 class BaseEntity(models.Model):
@@ -27,6 +28,7 @@ class Post(BaseEntity):
     body = models.TextField()
     publish = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+    tags = TaggableManager()
 
     class Meta:
         ordering = ('-publish',)
