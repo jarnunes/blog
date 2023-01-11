@@ -1,0 +1,6 @@
+<div class="d-block">
+    Tags:
+    {% for tag in tag_list %}
+        <a href="{% url 'blog:post_list_by_tag' tag_slug=tag.slug %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+</div>

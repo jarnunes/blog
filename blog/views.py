@@ -1,13 +1,14 @@
 from commons.python.helper import get_pagination, is_post_method
 from commons.python.smtp import send_email
 from django.contrib import messages
+from django.db.models import QuerySet, Count
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView
-
-from .models import Post, Comment
 from taggit.models import Tag
+
+from .models import Post
 from .python.forms import EmailPostForm, CommentForm
-# from .python.help.help import send_email
+from .python import messages as msg
 
 
 class PostListView(ListView):
@@ -18,49 +19,98 @@ class PostListView(ListView):
 
 
 def post_list(request, tag_slug=None):
+    template = 'post/list.html'
     posts = Post.published.all()
+    posts = _filter_by_tag(posts, tag_slug)
+    posts = _paginate(request, posts)
+    return render(request, template_name=template, context=posts)
 
-    tag = None
+
+def _filter_by_tag(posts: QuerySet, tag_slug: str) -> dict:
+    retorno = {'posts': posts, 'tag': None}
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
         posts = posts.filter(tags__in=[tag])
+        retorno['posts'] = posts
+        retorno['tag'] = tag
+    return retorno
 
-    posts = get_pagination(request=request, object_list=posts, per_page=3)
-    return render(request, template_name='post/list.html', context={'posts': posts, 'tag': tag})
+
+def _paginate(request, posts_tag) -> dict:
+    posts_paginated = get_pagination(request, posts_tag.get('posts'), 3)
+    posts_tag.update({'posts': posts_paginated})
+    return posts_tag
 
 
 def post_detail(request, year, month, day, post):
-    post = get_object_or_404(Post, slug=post, status='published', publish__year=year, publish__month=month,
+    post = get_object_or_404(Post, slug=post,
+                             status='published',
+                             publish__year=year,
+                             publish__month=month,
                              publish__day=day)
 
     comments = post.comments.filter(active=True)
     if is_post_method(request):
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.post = post
-            new_comment.save()
-            messages.success(request, 'Your comment has been added.')
+            save_comment(request, post, comment_form)
             return redirect(post.get_absolute_url())
     else:
         comment_form = CommentForm()
-    context = {'post': post, 'comments': comments, 'comment_form': comment_form}
+
+    similar_posts = _get_similar_posts(post)
+    context = {'post': post, 'comments': comments,
+               'comment_form': comment_form,
+               'similar_posts': similar_posts}
     return render(request=request, template_name='post/detail.html', context=context)
+
+
+def _get_similar_posts(post: Post):
+    post_tags_ids = _get_ids_list(post)
+    similar_posts = _filter_posts(post.id, post_tags_ids)
+    return _aggregate_and_order_posts(similar_posts)
+
+
+def _get_ids_list(post: Post):
+    return post.tags.values_list('id', flat=True)
+
+
+def _filter_posts(current_post_id, ids_list: list):
+    return Post.objects.filter(tags__in=ids_list).exclude(id=current_post_id)
+
+
+def _aggregate_and_order_posts(posts_list: QuerySet):
+    return posts_list.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:4]
+
+
+def save_comment(request, post: Post, form: CommentForm):
+    new_comment = form.save(commit=False)
+    new_comment.post = post
+    new_comment.save()
+    messages.success(request, msg.comment_success_save())
 
 
 def post_share(request, post_id):
     post = get_object_or_404(Post, id=post_id, status='published')
     if is_post_method(request):
         form = EmailPostForm(request.POST)
-        if form.is_valid():
-            cleaned_data = form.cleaned_data
-            post_url = request.build_absolute_uri(post.get_absolute_url())
-            subject = f'{cleaned_data.get("name")} recommends you read {post.title}'
-            message = f"Read {post.title} at {post_url} \n\n " \
-                      f"{cleaned_data.get('name')}\'s comments: {cleaned_data.get('comments')} "
-            send_email(subject, message, cleaned_data.get('to'))
-            messages.success(request, f'{post.title} was successfully sent to "{cleaned_data.get("to")}"')
+        _share_post_if_valid_form(request, form, post)
     form = EmailPostForm()
 
     context = {'post': post, 'form': form, }
     return render(request=request, template_name='post/share.html', context=context)
+
+
+def _share_post_if_valid_form(request, form: EmailPostForm, post: Post):
+    if form.is_valid():
+        cleaned_data = form.cleaned_data
+        url = _build_url(request, post)
+        subject = msg.mail_subject(cleaned_data.get("name"), post.title)
+        message = msg.mail_message(post.title, url, cleaned_data.get('name'), cleaned_data.get('comments'))
+
+        send_email(subject, message, cleaned_data.get('to'))
+        messages.success(request, not msg.mail_success_msg(post.title, cleaned_data.get("to")))
+
+
+def _build_url(request, post):
+    return request.build_absolute_uri(post.get_absolute_url())

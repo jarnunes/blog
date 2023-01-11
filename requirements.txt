@@ -10,7 +10,7 @@ docutils==0.19
 idna==3.4
 importlib-metadata==6.0.0
 jaraco.classes==3.2.3
-jnunes-commons==0.3.13
+jnunes-commons==0.3.14
 keyring==23.13.1
 more-itertools==9.0.0
 pkginfo==1.9.6

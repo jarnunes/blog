@@ -10,50 +10,10 @@
         <a href="{% url 'blog:post_share' post.id %}">Share this post <i class="bi bi-send-fill"></i></a>
     </p>
 
-    <form method="POST">
-        {% csrf_token %}
-        <div class="row g-2">
-            <div class="col">
-                <label for="{{ comment_form.name.id_for_label }}">Name:</label>
-                {{ comment_form.name }}
-            </div>
-            <div class="col">
-                <label for="{{ comment_form.email.id_for_label }}">E-mail:</label>
-                {{ comment_form.email }}
-            </div>
-            <div class="col-12">
-                <label for="{{ comment_form.body.id_for_label }}">Body:</label>
-                {{ comment_form.body }}
-            </div>
-        </div>
-        <input class="btn btn-sm btn-secondary mt-2" type="submit" value="Confirm">
-    </form>
+    {% include 'post/partials/similar_posts.html' with similar_posts=similar_posts %}
 
+    {% include 'post/partials/comment_form.html' with comment_form=comment_form %}
 
+    {% include 'post/partials/comments.html' with comments=comments %}
 
-    <div class="comments mt-5">
-        {% with comments.count as total_comments %}
-            <h2 class="h2">{{ total_comments }} comment{{ total_comments|pluralize }}</h2>
-        {% endwith %}
-        {% for comment in comments %}
-            <div class="d-flex text-muted pt-3">
-                <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"
-                     xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32"
-                     preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
-                    <rect width="100%" height="100%" fill="#007bff"/>
-                    <text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text>
-                </svg>
-                <p class="pb-3 mb-0 small lh-sm border-bottom">
-                    <strong class="d-block text-gray-dark">Comment by {{ comment.name }}
-                        on {{ comment.create_date|datetimef }}</strong>
-                    {{ comment.body }}
-                </p>
-            </div>
-        {% empty %}
-            <p>There are no comments yet.</p>
-        {% endfor %}
-        <small class="d-block text-end mt-3">
-            <a href="#">All comments</a>
-        </small>
-    </div>
 {% endblock %}

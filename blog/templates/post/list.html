@@ -4,17 +4,19 @@
 {% block container %}
 
     <h1 class="h1">My Blog</h1>
+    <hr>
+    {% if tag %}
+        <h4>Posts tagged with "{{ tag.name }}"</h4>
+    {% endif %}
     {% for post in posts %}
-        <h2 class="h2">
+        <h3 class="h2">
             <a href="{{ post.get_absolute_url }}">{{ post.title }} aa {{ posts|length }} </a>
-        </h2>
+        </h3>
         <p><em>{{ post.publish|datetimef }} by {{ post.author }}</em></p>
+        {% include 'post/partials/tags_link_list.html' with tag_list=post.tags.all %}
         {{ post.body|truncatewords:30|linebreaks }}
-
-        {% if not forloop.last %}
-            <hr>
-        {% endif %}
+        {% include 'post/partials/separator.html' %}
     {% endfor %}
-    {% include 'commons/components/pagination.html' with page_obj=page_obj %}
+    {% include 'commons/components/pagination.html' with page_obj=posts %}
 
 {% endblock %}
