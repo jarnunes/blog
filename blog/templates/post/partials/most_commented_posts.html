@@ -1,0 +1,8 @@
+<div class="my-5">
+    <h4 class="h4">Most commented Posts</h4>
+    <ul>
+        {% for post in most_commented_posts %}
+            <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
