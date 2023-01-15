@@ -7,8 +7,8 @@
             {% include 'post/partials/_header.html' %}
         </header>
     {% endblock %}
-    <main class="mt-5">
-        <div class="container pt-4" style="text-align: justify">
+    <main >
+        <div id="container" class="container mt-2" style="text-align: justify">
             <div id="messages" class="messages">{% include 'commons/components/messages.html' %}</div>
             {% block container %}{% endblock %}
         </div>

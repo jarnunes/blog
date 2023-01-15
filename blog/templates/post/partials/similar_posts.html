@@ -1,0 +1,7 @@
+<div class="bg-secondary bg-opacity-25">
+    <h2>Similar posts</h2>
+{% for similar_post in similar_posts %}
+    <a href="{{ similar_post.get_absolute_url }}">{{ similar_post.title }}</a>
+    {% include 'post/partials/separator.html' %}
+{% endfor %}
+</div>

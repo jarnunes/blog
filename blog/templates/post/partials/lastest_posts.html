@@ -1,0 +1,20 @@
+{% load blog %}
+{% if latest_posts|greaterthan:0 %}
+    <h4 class="h4">Latest Posts</h4>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 mt-4 config-container">
+        {% for post in latest_posts %}
+            <div class="col">
+                <div class="card">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text"  style="height: 7rem">
+                            {{ post.body|truncatewords:20 }}
+                        </p>
+                        <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Leia mais...</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

@@ -1,0 +1,22 @@
+{% load commons %}
+
+<div class="my-5">
+    <form method="POST">
+    {% csrf_token %}
+    <div class="row g-2">
+        <div class="col">
+            <label for="{{ comment_form.name.id_for_label }}">Name:</label>
+            {{ comment_form.name }}
+        </div>
+        <div class="col">
+            <label for="{{ comment_form.email.id_for_label }}">E-mail:</label>
+            {{ comment_form.email }}
+        </div>
+        <div class="col-12">
+            <label for="{{ comment_form.body.id_for_label }}">Body:</label>
+            {{ comment_form.body }}
+        </div>
+    </div>
+    <input class="btn btn-sm btn-secondary mt-2" type="submit" value="Confirm">
+</form>
+</div>

@@ -28,3 +28,7 @@ class CommentForm(forms.ModelForm):
             'email': forms.TextInput(attrs=BASE_STYLE_CLASS),
             'body': forms.Textarea(attrs=BASE_STYLE_CLASS),
         }
+
+
+class SearchForm(forms.Form):
+    query = forms.CharField()

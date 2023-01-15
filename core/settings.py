@@ -19,6 +19,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Sitemaps
+SITE_ID = 1
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -27,6 +30,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
+    'django.contrib.postgres',
     'blog',
     'commons',
     'taggit',
@@ -67,9 +73,13 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env('DJGDB_NAME'),
+        'USER': env('DJGDB_USERNAME'),
+        'PASSWORD': env('DJGDB_PASSWORD'),
+        'HOST': env('DJGDB_HOST'),
+        'PORT': env('DJGDB_PORT'),
+    },
 }
 
 # Password validation
