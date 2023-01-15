@@ -1,3 +1,4 @@
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from commons.python.helper import get_pagination, is_post_method
 from commons.python.smtp import send_email
 from django.contrib import messages
@@ -7,8 +8,8 @@ from django.views.generic import ListView
 from taggit.models import Tag
 
 from .models import Post
-from .python.forms import EmailPostForm, CommentForm
-from .python import messages as msg
+from blog.python.forms import EmailPostForm, CommentForm, SearchForm
+from blog.python import messages as msg
 
 
 class PostListView(ListView):
@@ -114,3 +115,20 @@ def _share_post_if_valid_form(request, form: EmailPostForm, post: Post):
 
 def _build_url(request, post):
     return request.build_absolute_uri(post.get_absolute_url())
+
+
+def post_search(request):
+    form = SearchForm()
+    query = None
+    results = []
+    if 'query' in request.GET:
+        form = SearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data.get('query')
+            search_vector = SearchVector('title', 'body')
+            search_query = SearchQuery(query)
+            search_rank = SearchRank(search_vector, search_query)
+            results = Post.published.annotate(search=search_vector, rank=search_rank).filter(search=query).order_by(
+                '-rank')
+    context = {'form': form, 'query': query, 'posts': results}
+    return render(request, template_name='post/search.html', context=context)

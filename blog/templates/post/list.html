@@ -10,12 +10,9 @@
     <div>
         <p>This is my blog. I've written {% total_posts %} posts so far.</p>
     </div>
-    {% if tag %}
-        <h4>Posts tagged with "{{ tag.name }}"</h4>
-    {% endif %}
     {% for post in posts %}
         <h3 class="h2">
-            <a href="{{ post.get_absolute_url }}">{{ post.title }} aa {{ posts|length }} </a>
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
         </h3>
         <p><em>{{ post.publish|datetimef }} by {{ post.author }}</em></p>
         {% include 'post/partials/tags_link_list.html' with tag_list=post.tags.all %}
@@ -23,13 +20,14 @@
         {% include 'post/partials/separator.html' %}
     {% endfor %}
 
+    {% include 'commons/components/pagination.html' with page_obj=posts %}
+
     <div class="my-5">
-        <h4 class="h4">Latest Posts</h4>
         {% show_latest_posts 4 %}
     </div>
     {% include 'post/partials/most_commented_posts.html' %}
     {% include 'post/partials/feeds.html' %}
 
-    {% include 'commons/components/pagination.html' with page_obj=posts %}
+
 
 {% endblock %}
