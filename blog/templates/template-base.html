@@ -1,6 +1,10 @@
 {% extends 'commons/external_base.html' %}
 {% load static %}
 {% load commons %}
+
+{% block custom_styles %}
+    <link rel="stylesheet" href="{% static 'blog/css/custom.css' %}">
+{% endblock %}
 {% block base_container %}
     {% block header %}
         <header>

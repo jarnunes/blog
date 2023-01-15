@@ -12,8 +12,11 @@ importlib-metadata==6.0.0
 jaraco.classes==3.2.3
 jnunes-commons==0.3.14
 keyring==23.13.1
+Markdown==3.4.1
 more-itertools==9.0.0
+Pillow==9.4.0
 pkginfo==1.9.6
+psycopg2-binary==2.9.5
 Pygments==2.14.0
 pywin32-ctypes==0.2.0
 readme-renderer==37.3
@@ -27,4 +30,5 @@ twine==4.0.2
 tzdata==2022.7
 urllib3==1.26.13
 webencodings==0.5.1
+whitenoise==6.3.0
 zipp==3.11.0

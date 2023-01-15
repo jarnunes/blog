@@ -6,6 +6,9 @@
     <h1 class="h1 border-bottom">{{ post.title }}</h1>
     <p><em>{{ post.publish|datetimef }} by {{ post.author }}</em></p>
     <p><em>Tags: {{ post.tags.all|join:', ' }}</em></p>
+
+    {% include 'post/partials/_post_image.html' %}
+
     <p>
         {{ post.body|markdown }}
         <a href="{% url 'blog:post_share' post.id %}">Share this post <i class="bi bi-send-fill"></i></a>

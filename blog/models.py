@@ -23,6 +23,7 @@ class Post(BaseModel):
     publish = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     tags = TaggableManager()
+    image = models.ImageField(upload_to='blog/%Y/%m', blank=True, null=True)
 
     class Meta:
         ordering = ('-publish',)

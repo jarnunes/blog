@@ -5,10 +5,11 @@
         {% for post in latest_posts %}
             <div class="col">
                 <div class="card">
-                    <img src="..." class="card-img-top" alt="...">
+                    {% include 'post/partials/_post_image.html' %}
                     <div class="card-body">
                         <h5 class="card-title">{{ post.title }}</h5>
-                        <p class="card-text"  style="height: 7rem">
+                        <hr>
+                        <p class="card-text" style="height: 7rem">
                             {{ post.body|truncatewords:20 }}
                         </p>
                         <a href="{{ post.get_absolute_url }}" class="btn btn-primary">Leia mais...</a>

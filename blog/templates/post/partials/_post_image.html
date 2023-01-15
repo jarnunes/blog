@@ -1,0 +1,9 @@
+{% if post.image %}
+    <div style="height: 185px;overflow: hidden">
+        <img class="card-img-top" src="{{ post.image.url }}" alt="{{ post.title }}">
+    </div>
+{% else %}
+    <div class="no-image-card">
+        <h4>No image!</h4>
+    </div>
+{% endif %}

@@ -53,6 +53,7 @@ class FormContext:
         self.__form = value_or_default(form, SearchForm())
         self.__query = query
         self.__tag = tag
+        self.__tag_list = None
 
     @property
     def form(self):
