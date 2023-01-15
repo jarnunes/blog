@@ -1,26 +1,18 @@
 {% extends 'template-base.html' %}
 {% load commons %}
 {% load blog %}
+{% load static %}
 {% block title %}Blog{% endblock %}
 {% block container %}
     {% get_most_commented_posts as most_commented_posts %}
 
-    <h1 class="h1">My Blog</h1>
-    <hr>
-    <div>
-        <p>This is my blog. I've written {% total_posts %} posts so far.</p>
-    </div>
-    {% for post in posts %}
-        <h3 class="h2">
-            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-        </h3>
-        <p><em>{{ post.publish|datetimef }} by {{ post.author }}</em></p>
-        {% include 'post/partials/tags_link_list.html' with tag_list=post.tags.all %}
-        {{ post.body|truncatewords:30|markdown }}
-        {% include 'post/partials/separator.html' %}
-    {% endfor %}
-
+    {% if query %}
+        {% include 'post/partials/_pots.html' %}
+    {% else %}
+        {% include 'post/partials/_post_list.html' %}
+    {% endif %}
     {% include 'commons/components/pagination.html' with page_obj=posts %}
+
 
     <div class="my-5">
         {% show_latest_posts 4 %}
@@ -28,6 +20,5 @@
     {% include 'post/partials/most_commented_posts.html' %}
     {% include 'post/partials/feeds.html' %}
 
-
-
+    <script src="{% static 'blog/js/custom.js' %}"></script>
 {% endblock %}

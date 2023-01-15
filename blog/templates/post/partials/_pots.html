@@ -1,0 +1,13 @@
+{% load commons %}
+{% load blog %}
+
+{% for post in posts %}
+    <h3 class="h2">
+        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+    </h3>
+    <p><em>{{ post.publish|datetimef }} by {{ post.author }}</em></p>
+    {{ post.body|truncatewords:30|markdown }}
+    {% include 'post/partials/separator.html' %}
+{% endfor %}
+
+

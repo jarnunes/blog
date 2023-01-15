@@ -31,3 +31,8 @@ def markdown_format(text):
 @register.filter(name='greaterthan')
 def greater_than(list_object: list, arg):
     return True if list_object and len(list_object) > arg else False
+
+
+@register.filter(name='count')
+def count(list_object):
+    return count(list_object)

@@ -1,15 +1,16 @@
-from commons.python.helper import get_pagination, is_post_method
+from commons.python.helper import get_pagination, is_post_method, is_ajax
 from commons.python.smtp import send_email
 from django.contrib import messages
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.db.models import Count
 from django.shortcuts import render, get_object_or_404, redirect
+from django.template.defaultfilters import pluralize
 from django.views.generic import ListView
 from taggit.models import Tag
 
 from blog.models import Post
 from blog.python import messages as msg
-from blog.python.contexts.contexts import SearchFormContext, ListFormContext, PostDetailContext
+from blog.python.contexts.contexts import FormContext, PostDetailContext
 from blog.python.forms import EmailPostForm, CommentForm, SearchForm
 
 
@@ -22,22 +23,48 @@ class PostListView(ListView):
 
 def post_list(request, tag_slug=None):
     template = 'post/list.html'
-    listform_context = ListFormContext(posts=Post.published.all())
-    _filter_by_tag(listform_context, tag_slug)
-    _paginate(request, listform_context)
-    return render(request, template_name=template, context=listform_context.to_json())
+
+    form_context = FormContext()
+    if is_ajax(request) and 'query' in request.GET:
+        _filter_posts_if_valid_form(request, form_context)
+    else:
+        form_context.posts = Post.published.all()
+
+    _filter_by_tag(form_context, tag_slug)
+    _paginate(request, form_context)
+    return render(request, template_name=template, context=form_context.to_json())
 
 
-def _filter_by_tag(listform_context: ListFormContext, tag_slug: str):
+def _filter_by_tag(form_context: FormContext, tag_slug: str):
     if tag_slug:
-        listform_context.tag = get_object_or_404(Tag, slug=tag_slug)
-        listform_context.posts = listform_context.posts.filter(tags__in=[listform_context.tag])
-    return listform_context
+        form_context.tag = get_object_or_404(Tag, slug=tag_slug)
+        form_context.posts = form_context.posts.filter(tags__in=[form_context.tag])
 
 
-def _paginate(request, listform_context: ListFormContext):
-    listform_context.posts = get_pagination(request, listform_context.posts, 3)
-    return listform_context
+def _paginate(request, form_context: FormContext):
+    form_context.posts = get_pagination(request, form_context.posts, 3)
+
+
+def _filter_posts_if_valid_form(request, searchform_context: FormContext):
+    searchform_context.form = SearchForm(request.GET)
+
+    if searchform_context.form.is_valid():
+        searchform_context.query = searchform_context.form
+        search_vector = SearchVector('title', weight='A') + SearchVector('body', weight='B')
+        search_query = SearchQuery(searchform_context.query)
+        search_rank = SearchRank(search_vector, search_query)
+        searchform_context.posts = Post.published.annotate(search=search_vector, rank=search_rank).filter(
+            search=searchform_context.query).order_by('-rank')
+        _add_search_message(request, searchform_context.posts, searchform_context.query)
+    return searchform_context
+
+
+def _add_search_message(request, posts, query):
+    message = f'Found {len(posts)} post containing{pluralize(posts)} "{query}"'
+    if len(posts) > 0:
+        messages.success(request, message)
+    else:
+        messages.warning(request, message)
 
 
 def post_detail(request, year, month, day, post):
@@ -100,24 +127,3 @@ def _share_post_if_valid_form(request, form: EmailPostForm, post: Post):
 
 def _build_url(request, post):
     return request.build_absolute_uri(post.get_absolute_url())
-
-
-# SearchVector e  SearchRank são específicos do postgres.
-def post_search(request):
-    search_context = SearchFormContext()
-    if 'query' in request.GET:
-        _filter_posts_if_valid_form(request, search_context)
-    return render(request, template_name='post/search.html', context=search_context.to_json())
-
-
-def _filter_posts_if_valid_form(request, searchform_context: SearchFormContext):
-    searchform_context.form = SearchForm(request.GET)
-
-    if searchform_context.form.is_valid():
-        searchform_context.query = searchform_context.form
-        search_vector = SearchVector('title', weight='A') + SearchVector('title', weight='B')
-        search_query = SearchQuery(searchform_context.query)
-        search_rank = SearchRank(search_vector, search_query)
-        searchform_context.posts = Post.published.annotate(search=search_vector, rank=search_rank).filter(
-            search=searchform_context.query).order_by('-rank')
-    return searchform_context
