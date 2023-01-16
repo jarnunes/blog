@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import pluralize
 from django.views.generic import ListView
 from taggit.models import Tag
-
+from django.db.models.query_utils import Q
 from blog.models import Post
 from blog.python import messages as msg
 from blog.python.contexts.contexts import FormContext, PostDetailContext
@@ -26,7 +26,8 @@ def post_list(request, tag_slug=None):
 
     form_context = FormContext()
     if is_ajax(request) and 'query' in request.GET:
-        _filter_posts_if_valid_form(request, form_context)
+        # _filter_posts_if_valid_form(request, form_context)
+        _filter_posts_if_valid_form_sqlite(request, form_context)
     else:
         form_context.posts = Post.published.all()
 
@@ -45,6 +46,7 @@ def _paginate(request, form_context: FormContext):
     form_context.posts = get_pagination(request, form_context.posts, 3)
 
 
+# specific to postgres sql
 def _filter_posts_if_valid_form(request, searchform_context: FormContext):
     searchform_context.form = SearchForm(request.GET)
 
@@ -57,6 +59,17 @@ def _filter_posts_if_valid_form(request, searchform_context: FormContext):
             search=searchform_context.query).order_by('-rank')
         _add_search_message(request, searchform_context.posts, searchform_context.query)
     return searchform_context
+
+
+def _filter_posts_if_valid_form_sqlite(request, searchform_context: FormContext):
+    searchform_context.form = SearchForm(request.GET)
+
+    if searchform_context.form.is_valid():
+        searchform_context.query = searchform_context.form
+        query = searchform_context.query
+        searchform_context.posts = Post.published.filter(
+            Q(title__contains=query) | Q(body__contains=query))
+        _add_search_message(request, searchform_context.posts, searchform_context.query)
 
 
 def _add_search_message(request, posts, query):
@@ -87,7 +100,7 @@ def _filter_similar_posts(postdetail_context: PostDetailContext):
 
 
 def _filter_posts(postdetail_context: PostDetailContext):
-    postdetail_context.similar_posts = Post.objects.filter(
+    postdetail_context.similar_posts = Post.published.filter(
         tags__in=postdetail_context.get_post_id_list()).exclude(id=postdetail_context.post.id)
 
 

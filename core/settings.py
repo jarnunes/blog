@@ -15,7 +15,7 @@ environ.Env.read_env()
 SECRET_KEY = 'django-insecure-0iom3w)c-v4(6nproe=f25&d7rld!n!#=&bbvsrnhj=jx9xq3l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 DEBUG_PROPAGATE_EXCEPTIONS = True
 
 ALLOWED_HOSTS = ['127.0.0.1', ]
@@ -73,13 +73,17 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default2': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': env('DJGDB_NAME'),
+    #     'USER': env('DJGDB_USERNAME'),
+    #     'PASSWORD': env('DJGDB_PASSWORD'),
+    #     'HOST': env('DJGDB_HOST'),
+    #     'PORT': env('DJGDB_PORT'),
+    # },
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env('DJGDB_NAME'),
-        'USER': env('DJGDB_USERNAME'),
-        'PASSWORD': env('DJGDB_PASSWORD'),
-        'HOST': env('DJGDB_HOST'),
-        'PORT': env('DJGDB_PORT'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     },
 }
 
