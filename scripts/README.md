@@ -48,7 +48,7 @@ The article reference are available on this [Link](https://www.codewithharry.com
 
 1. Create the file gunicorn.socket
 
-> sudo nano /etc/systemd/system/gunicorn.socket
+> sudo nano /etc/systemd/system/blog.socket
 
 2. Now, past the content:
 
@@ -57,7 +57,7 @@ The article reference are available on this [Link](https://www.codewithharry.com
 Description=gunicorn socket
 
 [Socket]
-ListenStream=/run/gunicorn.sock
+ListenStream=/run/blog.sock
 
 [Install]
 WantedBy=sockets.target
@@ -65,7 +65,7 @@ WantedBy=sockets.target
 
 3. Create the blog.service with command:
 
-> sudo nano /etc/systemd/system/gunicorn.service
+> sudo nano /etc/systemd/system/blog.service
 
 4. And past the file content bellow. Pay attention here: You need replace the ``WorkingDirectory`` value with your
    project home directory.
@@ -75,7 +75,7 @@ WantedBy=sockets.target
 ```shell
 [Unit]
 Description=gunicorn daemon
-Requires=gunicorn.socket
+Requires=blog.socket
 After=network.target
 
 [Service]
@@ -85,7 +85,7 @@ WorkingDirectory=/home/ubuntu/blog
 ExecStart=/home/ubuntu/blog/venv/bin/gunicorn \
           --access-logfile - \
           --workers 3 \
-          --bind unix:/run/gunicorn.sock \
+          --bind unix:/run/blog.sock \
           core.wsgi:application
 
 [Install]
@@ -93,19 +93,19 @@ WantedBy=multi-user.target
 ```
 
 5. Now, we need activate the socket.
-> sudo systemctl start gunicorn.socket
+> sudo systemctl start blog.socket
 
-> sudo systemctl enable gunicorn.socket
+> sudo systemctl enable blog.socket
 
-> sudo systemctl status gunicorn.socket
+> sudo systemctl status blog.socket
 6. For check if it's ok, run:
-> sudo systemctl status gunicorn.socket
+> sudo systemctl status blog.socket
 
-> sudo systemctl status gunicorn
+> sudo systemctl status blog
 
-> curl --unix-socket /run/gunicorn.sock localhost
+> curl --unix-socket /run/blog.sock localhost
 
-> sudo systemctl status gunicorn
+> sudo systemctl status blog
 
 7. Now, we're going to configure nginx:
 > sudo nano /etc/nginx/sites-available/blog
@@ -122,7 +122,7 @@ server {
 
     location / {
         include proxy_params;
-        proxy_pass http://unix:/run/gunicorn.sock;
+        proxy_pass http://unix:/run/blog.sock;
     }
 }
 ```
@@ -135,7 +135,7 @@ server {
 
 > sudo systemctl restart nginx
 
-> sudo systemctl restart gunicorn
+> sudo systemctl restart blog
 
 # Configuring SSL
 ```shell
@@ -186,7 +186,7 @@ server {
 	# Add index.php to the list if you are using PHP
 	index index.html index.htm index.nginx-debian.html index.php;
 
-	server_name blog2.jnunesc.com.br;
+	server_name blog.jnunesc.com.br;
 
 	location = /favicon.ico { access_log off; log_not_found off; }
 	location /static/ {
@@ -199,7 +199,7 @@ server {
 
 	location / {
 			include proxy_params;
-			proxy_pass http://unix:/run/gunicorn.sock;
+			proxy_pass http://unix:/run/blog.sock;
 	}
 
 	# deny access to .htaccess files, if Apache's document root
@@ -245,7 +245,7 @@ server {
 ````
 > sudo systemctl restart nginx
 
-> sudo systemctl restart gunicorn
+> sudo systemctl restart blog
 
 
 ## Commons errors
