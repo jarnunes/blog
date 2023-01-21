@@ -1,0 +1,9 @@
+
+div.no-image-card {
+    height: 185px;
+    overflow: hidden;
+    background: #94a1aa;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}

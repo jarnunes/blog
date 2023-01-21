@@ -139,4 +139,4 @@ media
 # static files except recources/static
 static/
 !resources/static
-!resources/static/css
+!blog/static
