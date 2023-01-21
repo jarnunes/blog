@@ -1,22 +1,20 @@
 from commons.python.helper import get_pagination, is_post_method, is_ajax
-from commons.python.smtp import send_simple_email as send_email
 from commons.smtp.objects import EmailHtml
 from commons.smtp.smtp import send_html_email
-
 from django.contrib import messages
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.db.models import Count
+from django.db.models.query_utils import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.defaultfilters import pluralize
+from django.template.loader import render_to_string
 from django.views.generic import ListView
 from taggit.models import Tag
-from django.db.models.query_utils import Q
+
 from blog.models import Post
 from blog.python import messages as msg
 from blog.python.contexts.contexts import FormContext, PostDetailContext
 from blog.python.forms import EmailPostForm, CommentForm, SearchForm
-from blog.python.smtp import send_mail as mail
-from django.template.loader import render_to_string
 
 
 class PostListView(ListView):
