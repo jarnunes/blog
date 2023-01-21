@@ -18,8 +18,8 @@ SECRET_KEY = 'django-insecure-0iom3w)c-v4(6nproe=f25&d7rld!n!#=&bbvsrnhj=jx9xq3l
 DEBUG = False
 DEBUG_PROPAGATE_EXCEPTIONS = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'blog2.jnunesc.com.br', 'blog.jnunesc.com.br']
-CSRF_TRUSTED_ORIGINS = ['http://blog2.jnunesc.com.br', 'https://blog.jnunesc.com.br']
+ALLOWED_HOSTS = ['127.0.0.1', 'blog2.jnunesc.com.br', 'blog.jnunesc.com.br', 'blog-demo.jnunesc.com.br']
+CSRF_TRUSTED_ORIGINS = ['https://blog-demo.jnunesc.com.br', 'https://blog-demo.jnunesc.com.br']
 
 
 # Sitemaps
