@@ -12,14 +12,14 @@ def total_posts():
     return Post.published.count()
 
 
-@register.inclusion_tag('post/partials/lastest_posts.html')
+@register.inclusion_tag('post/partials/_latest_posts.html')
 def show_latest_posts(count=5):
     latest = Post.published.order_by('-publish')[:count]
     return {'latest_posts': latest}
 
 
 @register.simple_tag
-def get_most_commented_posts(count=5):
+def get_most_commented_posts():
     return Post.published.annotate(total_comments=Count('comments')).order_by('-total_comments')[:3]
 
 

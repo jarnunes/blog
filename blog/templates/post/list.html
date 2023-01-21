@@ -13,12 +13,10 @@
     {% endif %}
     {% include 'commons/components/pagination.html' with page_obj=posts %}
 
-
     <div class="my-5">
-        {% show_latest_posts 4 %}
+        {% show_latest_posts 3 %}
     </div>
-    {% include 'post/partials/most_commented_posts.html' %}
+    {% include 'post/partials/_most_commented_posts.html' %}
     {% include 'post/partials/feeds.html' %}
 
-    <script src="{% static 'blog/js/custom.js' %}"></script>
 {% endblock %}

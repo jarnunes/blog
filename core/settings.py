@@ -15,9 +15,12 @@ environ.Env.read_env()
 SECRET_KEY = 'django-insecure-0iom3w)c-v4(6nproe=f25&d7rld!n!#=&bbvsrnhj=jx9xq3l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+DEBUG_PROPAGATE_EXCEPTIONS = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'blog2.jnunesc.com.br', 'blog.jnunesc.com.br', 'blog-demo.jnunesc.com.br']
+CSRF_TRUSTED_ORIGINS = ['https://blog-demo.jnunesc.com.br', 'https://blog-demo.jnunesc.com.br']
+
 
 # Sitemaps
 SITE_ID = 1
@@ -72,13 +75,17 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
+    # 'default2': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': env('DJGDB_NAME'),
+    #     'USER': env('DJGDB_USERNAME'),
+    #     'PASSWORD': env('DJGDB_PASSWORD'),
+    #     'HOST': env('DJGDB_HOST'),
+    #     'PORT': env('DJGDB_PORT'),
+    # },
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env('DJGDB_NAME'),
-        'USER': env('DJGDB_USERNAME'),
-        'PASSWORD': env('DJGDB_PASSWORD'),
-        'HOST': env('DJGDB_HOST'),
-        'PORT': env('DJGDB_PORT'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     },
 }
 
@@ -111,10 +118,22 @@ USE_I18N = True
 
 USE_TZ = True
 
+# A linha abaixo deve ser descomentada apenas quando debug=True para evitra o erro 500
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# A linha abaixo deve ser descomentada apenas quando o debug=False
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+# STATICFILES_DIRS = [BASE_DIR / 'static/']
+STATIC_ROOT = 'static/'
+
+# Media files
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = 'media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

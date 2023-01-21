@@ -131,3 +131,11 @@ dmypy.json
 
 # Pychamr folders
 .idea/
+
+
+
+#media foler
+media
+# static files except recources/static
+static/
+!resources/static
