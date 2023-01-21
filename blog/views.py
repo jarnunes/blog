@@ -1,5 +1,8 @@
 from commons.python.helper import get_pagination, is_post_method, is_ajax
-from commons.python.smtp import send_email
+from commons.python.smtp import send_simple_email as send_email
+from commons.smtp.objects import EmailHtml
+from commons.smtp.smtp import send_html_email
+
 from django.contrib import messages
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 from django.db.models import Count
@@ -12,6 +15,8 @@ from blog.models import Post
 from blog.python import messages as msg
 from blog.python.contexts.contexts import FormContext, PostDetailContext
 from blog.python.forms import EmailPostForm, CommentForm, SearchForm
+from blog.python.smtp import send_mail as mail
+from django.template.loader import render_to_string
 
 
 class PostListView(ListView):
@@ -130,12 +135,37 @@ def post_share(request, post_id):
 def _share_post_if_valid_form(request, form: EmailPostForm, post: Post):
     if form.is_valid():
         cleaned_data = form.cleaned_data
-        url = _build_url(request, post)
-        subject = msg.mail_subject(cleaned_data.get("name"), post.title)
-        message = msg.mail_message(post.title, url, cleaned_data.get('name'), cleaned_data.get('comments'))
+        email = _get_email_class(request, post, cleaned_data)
+        send_html_email(email)
 
-        send_email(subject, message, cleaned_data.get('to'))
+        # mail()
+        # send_email(subject, message, cleaned_data.get('to'))
         messages.success(request, not msg.mail_success_msg(post.title, cleaned_data.get("to")))
+
+
+def _get_email_class(request, post, cleaned_data) -> EmailHtml:
+    email = EmailHtml(
+        subject=f'{cleaned_data.get("name")} recommends you read {post.title}',
+        text_message=_get_text_email(request, post, cleaned_data),
+        html_message=_get_html_email(request, post, cleaned_data),
+        to=cleaned_data.get('to'),
+        sender_email=cleaned_data.get('email'),
+        sender_name=cleaned_data.get('name'))
+    return email
+
+
+def _get_text_email(request, post, cleaned_data):
+    url = _build_url(request, post)
+    name = cleaned_data.get("name")
+    return f"Read {post.title} at {url} \n\n {name}\'s comments: {cleaned_data.get('comments')} "
+
+
+def _get_html_email(request, post, cleaned_data):
+    context = {'name': cleaned_data.get('name'),
+               'comments': cleaned_data.get('comments'),
+               'post_title': post.title,
+               'url': _build_url(request, post)}
+    return render_to_string('emails/share_post.html', context=context)
 
 
 def _build_url(request, post):
